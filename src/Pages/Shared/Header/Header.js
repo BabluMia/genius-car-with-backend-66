@@ -41,6 +41,8 @@ const Header = () => {
             </Nav>
             <Nav>
               <Nav.Link  to="/about" as={Link}>About</Nav.Link>
+              <Nav.Link  to="/addservice" as={Link}>Add</Nav.Link>
+              <Nav.Link  to="/orders" as={Link}>Orders</Nav.Link>
               {
                 user ? <Nav.Link eventKey={2} onClick={handleLogOut} to="/home" as={Link}>
                 Logout

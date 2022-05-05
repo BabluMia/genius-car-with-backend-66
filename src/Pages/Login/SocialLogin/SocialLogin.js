@@ -1,22 +1,31 @@
 import React from "react";
-import { useSignInWithGithub, useSignInWithGoogle } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import {
+  useSignInWithGithub,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
+import { useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const SocialLogin = () => {
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
   const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
   const navigate = useNavigate();
-  if (user || user1) {
-    navigate("/home");
-  }
+  const location = useLocation()
+
+  let from = location.state?.from?.pathname || "/";
+
   let errorElem;
   if (error || error1) {
     errorElem = (
       <div>
-        <p>Error: {error?.message} {error1?.message}</p>
+        <p>
+          Error: {error?.message} {error1?.message}
+        </p>
       </div>
     );
+  }
+  if (user || user1) {
+    navigate(from, { replace: true });
   }
 
   return (
@@ -26,9 +35,7 @@ const SocialLogin = () => {
         <p className="mt-2 px-2 fw-bold">or</p>
         <div style={{ height: "1px" }} className="w-50 bg-primary"></div>
       </div>
-      {
-          errorElem
-      }
+      {errorElem}
       <div className="mb-4 text-center">
         <button
           onClick={() => signInWithGoogle()}
@@ -41,7 +48,12 @@ const SocialLogin = () => {
           Facebook Sign In
         </button>{" "}
         <br />
-        <button onClick={() => signInWithGithub()} className="w-50 btn btn-primary my-2 ">Github Sign In</button>
+        <button
+          onClick={() => signInWithGithub()}
+          className="w-50 btn btn-primary my-2 "
+        >
+          Github Sign In
+        </button>
       </div>
     </>
   );
